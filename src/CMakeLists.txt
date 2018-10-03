@@ -1,0 +1,19 @@
+
+include(AMXConfig)
+include(AddSAMPPlugin)
+
+set(PLUGIN_SOURCES ${SAMPSDK_DIR}/amxplugin.cpp)
+
+list(APPEND PLUGIN_SOURCES
+	${SAMPGDK_INCLUDE_DIR}/sampgdk.c
+	${CMAKE_CURRENT_SOURCE_DIR}/Main.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Format.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Natives.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Plugin.cpp
+)
+
+if(WIN32)
+	list(APPEND PLUGIN_SOURCES ${PROJECT_SOURCE_DIR}/exports.def)
+endif()
+
+set(PLUGIN_SOURCES "${PLUGIN_SOURCES}" PARENT_SCOPE)

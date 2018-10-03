@@ -1,0 +1,6 @@
+﻿EXPORTS
+	Load
+	Unload
+	AmxLoad
+	AmxUnload
+	Supports
