@@ -104,9 +104,9 @@ cell AMX_NATIVE_CALL Natives::SetPlayerChatBubblef(AMX* amx, cell* params)
 {
 	return static_cast<cell>(SetPlayerChatBubble(
 		static_cast<int>(params[1]),
-		Plugin::FormatString(amx, params, 5)
+		Plugin::FormatString(amx, params, 5),
 		static_cast<int>(params[2]),
 		static_cast<float>(params[3]),
-		static_cast<int>(params[4]),
+		static_cast<int>(params[4])
 	));
 }
