@@ -82,3 +82,31 @@ cell AMX_NATIVE_CALL Natives::ShowPlayerDialogf(AMX* amx, cell* params)
 		button2 ? button2 : ""
 	));
 }
+
+cell AMX_NATIVE_CALL Natives::SendPlayerMessageToPlayerf(AMX* amx, cell* params)
+{
+	return static_cast<cell>(SendPlayerMessageToPlayer(
+		static_cast<int>(params[1]),
+		static_cast<int>(params[2]),
+		Plugin::FormatString(amx, params, 3)
+	));
+}
+
+cell AMX_NATIVE_CALL Natives::SendPlayerMessageToAllf(AMX* amx, cell* params)
+{
+	return static_cast<cell>(SendPlayerMessageToAll(
+		static_cast<int>(params[1]),
+		Plugin::FormatString(amx, params, 2)
+	));
+}
+
+cell AMX_NATIVE_CALL Natives::SetPlayerChatBubblef(AMX* amx, cell* params)
+{
+	return static_cast<cell>(SetPlayerChatBubble(
+		static_cast<int>(params[1]),
+		Plugin::FormatString(amx, params, 5)
+		static_cast<int>(params[2]),
+		static_cast<float>(params[3]),
+		static_cast<int>(params[4]),
+	));
+}
