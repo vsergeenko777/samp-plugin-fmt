@@ -4,7 +4,7 @@
 void Plugin::Load()
 {
 	sampgdk::logprintf(" * fmt plugin loaded");
-	sampgdk::logprintf(" * v1.0 © vsergeenko");
+	sampgdk::logprintf(" * v1.0 Â© vsergeenko");
 }
 
 void Plugin::Unload()
@@ -22,6 +22,9 @@ const AMX_NATIVE_INFO nativeList[] =
 	{ "TextDrawSetStringf", Natives::TextDrawSetStringf },
 	{ "PlayerTextDrawSetStringf", Natives::PlayerTextDrawSetStringf },
 	{ "ShowPlayerDialogf", Natives::ShowPlayerDialogf },
+	{ "SendPlayerMessageToPlayerf", Natives::SendPlayerMessageToPlayerf },
+	{ "SendPlayerMessageToAllf", Natives::SendPlayerMessageToAllf },
+	{ "SetPlayerChatBubblef", Natives::SetPlayerChatBubblef },
 	// ======================
 	{ NULL, NULL }
 };

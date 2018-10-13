@@ -12,4 +12,7 @@ public:
 	static cell AMX_NATIVE_CALL TextDrawSetStringf(AMX* amx, cell* params);
 	static cell AMX_NATIVE_CALL PlayerTextDrawSetStringf(AMX* amx, cell* params);
 	static cell AMX_NATIVE_CALL ShowPlayerDialogf(AMX* amx, cell* params);
+	static cell AMX_NATIVE_CALL SendPlayerMessageToPlayerf(AMX* amx, cell* params);
+	static cell AMX_NATIVE_CALL SendPlayerMessageToAllf(AMX* amx, cell* params);
+	static cell AMX_NATIVE_CALL SetPlayerChatBubblef(AMX* amx, cell* params);
 };
