@@ -4,7 +4,7 @@
 void Plugin::Load()
 {
 	sampgdk::logprintf(" * fmt plugin loaded");
-	sampgdk::logprintf(" * v1.0 (c) vsergeenko");
+	sampgdk::logprintf(" * v1.1 (c) vsergeenko");
 }
 
 void Plugin::Unload()
