@@ -4,6 +4,8 @@
 #endif
 #define _fmt_included
 
+native fmt_toggle_crp_mode(bool: toggle);
+
 native SendClientMessagef(playerid, color, const message[], {Float,_}:...);
 native SendClientMessageToAllf(color, const message[], {Float,_}:...);
 native GameTextForAllf(time, style, const string[], {Float,_}:...);

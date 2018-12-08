@@ -4,6 +4,7 @@
 class Natives
 {
 public:
+	static cell AMX_NATIVE_CALL fmt_toggle_crp_mode(AMX* amx, cell* params);
 	static cell AMX_NATIVE_CALL SendClientMessagef(AMX* amx, cell* params);
 	static cell AMX_NATIVE_CALL SendClientMessageToAllf(AMX* amx, cell* params);
 	static cell AMX_NATIVE_CALL GameTextForAllf(AMX* amx, cell* params);

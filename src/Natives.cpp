@@ -1,6 +1,12 @@
 
 #include "Main.h"
 
+cell AMX_NATIVE_CALL Natives::fmt_toggle_crp_mode(AMX* amx, cell* params)
+{
+	Plugin::ToggleCrpMode(amx, params[1] ? true : false);
+	return 1;
+}
+
 cell AMX_NATIVE_CALL Natives::SendClientMessagef(AMX* amx, cell* params)
 {
 	return static_cast<cell>(SendClientMessage(
@@ -21,7 +27,7 @@ cell AMX_NATIVE_CALL Natives::SendClientMessageToAllf(AMX* amx, cell* params)
 cell AMX_NATIVE_CALL Natives::GameTextForAllf(AMX* amx, cell* params)
 {
 	return static_cast<cell>(GameTextForAll(
-		Plugin::FormatString(amx, params, 3),
+		Plugin::FormatString(amx, params, 3, true),
 		static_cast<int>(params[1]),
 		static_cast<int>(params[2])
 	));
@@ -31,7 +37,7 @@ cell AMX_NATIVE_CALL Natives::GameTextForPlayerf(AMX* amx, cell* params)
 {
 	return static_cast<cell>(GameTextForPlayer(
 		static_cast<int>(params[1]),
-		Plugin::FormatString(amx, params, 4),
+		Plugin::FormatString(amx, params, 4, true),
 		static_cast<int>(params[2]),
 		static_cast<int>(params[3])
 	));
@@ -48,7 +54,7 @@ cell AMX_NATIVE_CALL Natives::TextDrawSetStringf(AMX* amx, cell* params)
 {
 	return static_cast<cell>(TextDrawSetString(
 		static_cast<int>(params[1]),
-		Plugin::FormatString(amx, params, 2)
+		Plugin::FormatString(amx, params, 2, true)
 	));
 }
 
@@ -57,7 +63,7 @@ cell AMX_NATIVE_CALL Natives::PlayerTextDrawSetStringf(AMX* amx, cell* params)
 	return static_cast<cell>(PlayerTextDrawSetString(
 		static_cast<int>(params[1]),
 		static_cast<int>(params[2]),
-		Plugin::FormatString(amx, params, 3)
+		Plugin::FormatString(amx, params, 3, true)
 	));
 }
 

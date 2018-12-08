@@ -1,6 +1,8 @@
 
 #include "Main.h"
 
+std::map<AMX*, Plugin::AmxData> Plugin::amxMap;
+
 void Plugin::Load()
 {
 	sampgdk::logprintf(" * fmt plugin loaded");
@@ -14,6 +16,8 @@ void Plugin::Unload()
 
 const AMX_NATIVE_INFO nativeList[] =
 {
+	{ "fmt_toggle_crp_mode", Natives::fmt_toggle_crp_mode },
+	// ======================
 	{ "SendClientMessagef", Natives::SendClientMessagef },
 	{ "SendClientMessageToAllf", Natives::SendClientMessageToAllf },
 	{ "GameTextForAllf", Natives::GameTextForAllf },
@@ -29,9 +33,33 @@ const AMX_NATIVE_INFO nativeList[] =
 	{ NULL, NULL }
 };
 
-int Plugin::AmxLoad(AMX* amx)
+int32_t Plugin::AmxLoad(AMX* amx)
 {
+	if (amxMap.find(amx) == amxMap.end()) {
+		amxMap.insert(std::make_pair(amx, AmxData()));
+	}
+
 	return amx_Register(amx, nativeList, -1);
+}
+
+int32_t Plugin::AmxUnload(AMX* amx)
+{
+	if (amxMap.find(amx) != amxMap.end()) {
+		amxMap.erase(amx);
+	}
+
+	return AMX_ERR_NONE;
+}
+
+void Plugin::ToggleCrpMode(AMX* amx, bool toggle)
+{
+	auto amxData = amxMap.find(amx);
+
+	if (amxData == amxMap.end()) {
+		return;
+	}
+
+	amxData->second.useCrpMode = toggle;
 }
 
 cell* get_amxaddr(AMX* amx, cell amx_addr)
@@ -39,11 +67,98 @@ cell* get_amxaddr(AMX* amx, cell amx_addr)
 	return (cell*)(amx->base + (int)(((AMX_HEADER*)amx->base)->dat + amx_addr));
 }
 
-char* Plugin::FormatString(AMX* amx, cell* params, int parm)
+char* Plugin::FormatString(AMX* amx, cell* params, int32_t parm, bool gxt)
 {
 	static char outbuf[4096];
 	cell* addr = get_amxaddr(amx, params[parm++]);
-	int len = atcprintf(outbuf, sizeof(outbuf) - 1, addr, amx, params, &parm);
+	int32_t len = atcprintf(outbuf, sizeof(outbuf) - 1, addr, amx, params, &parm);
 	outbuf[len] = 0;
+
+	if (gxt)
+	{
+		auto amxData = amxMap.find(amx);
+
+		if (amxData != amxMap.end() && amxData->second.useCrpMode) {
+			TranslateString(outbuf, len);
+		}
+	}
+
 	return outbuf;
+}
+
+void Plugin::TranslateString(char* buf, int32_t len)
+{
+	for (int32_t i = 0; i < len; i++)
+	{
+		switch (buf[i])
+		{
+			case 'à': { buf[i] = 'a'; break; }
+			case 'À': { buf[i] = 'A'; break; }
+			case 'á': { buf[i] = '—'; break; }
+			case 'Á': { buf[i] = '€'; break; }
+			case 'â': { buf[i] = '¢'; break; }
+			case 'Â': { buf[i] = '‹'; break; }
+			case 'ã': { buf[i] = '™'; break; }
+			case 'Ã': { buf[i] = '‚'; break; }
+			case 'ä': { buf[i] = 'š'; break; }
+			case 'Ä': { buf[i] = 'ƒ'; break; }
+			case 'å': { buf[i] = 'e'; break; }
+			case 'Å': { buf[i] = 'E'; break; }
+			case '¸': { buf[i] = 'e'; break; }
+			case '¨': { buf[i] = 'E'; break; }
+			case 'æ': { buf[i] = '›'; break; }
+			case 'Æ': { buf[i] = '„'; break; }
+			case 'ç': { buf[i] = 'Ÿ'; break; }
+			case 'Ç': { buf[i] = 'ˆ'; break; }
+			case 'è': { buf[i] = 'œ'; break; }
+			case 'È': { buf[i] = '…'; break; }
+			case 'é': { buf[i] = ''; break; }
+			case 'É': { buf[i] = '†'; break; }
+			case 'ê': { buf[i] = 'k'; break; }
+			case 'Ê': { buf[i] = 'K'; break; }
+			case 'ë': { buf[i] = 'ž'; break; }
+			case 'Ë': { buf[i] = '‡'; break; }
+			case 'ì': { buf[i] = '¯'; break; }
+			case 'Ì': { buf[i] = 'M'; break; }
+			case 'í': { buf[i] = '®'; break; }
+			case 'Í': { buf[i] = 'H'; break; }
+			case 'î': { buf[i] = 'o'; break; }
+			case 'Î': { buf[i] = 'O'; break; }
+			case 'ï': { buf[i] = '£'; break; }
+			case 'Ï': { buf[i] = 'Œ'; break; }
+			case 'ð': { buf[i] = 'p'; break; }
+			case 'Ð': { buf[i] = 'P'; break; }
+			case 'ñ': { buf[i] = 'c'; break; }
+			case 'Ñ': { buf[i] = 'C'; break; }
+			case 'ò': { buf[i] = '¦'; break; }
+			case 'Ò': { buf[i] = ''; break; }
+			case 'ó': { buf[i] = 'y'; break; }
+			case 'Ó': { buf[i] = 'Y'; break; }
+			case 'ô': { buf[i] = '˜'; break; }
+			case 'Ô': { buf[i] = ''; break; }
+			case 'õ': { buf[i] = 'x'; break; }
+			case 'Õ': { buf[i] = 'X'; break; }
+			case 'ö': { buf[i] = ' '; break; } // 160
+			case 'Ö': { buf[i] = '‰'; break; }
+			case '÷': { buf[i] = '¤'; break; }
+			case '×': { buf[i] = ''; break; }
+			case 'ø': { buf[i] = '¥'; break; }
+			case 'Ø': { buf[i] = 'Ž'; break; }
+			case 'ù': { buf[i] = '¡'; break; }
+			case 'Ù': { buf[i] = 'Š'; break; }
+			case 'ü': { buf[i] = '©'; break; }
+			case 'Ü': { buf[i] = '’'; break; }
+			case 'ú': { buf[i] = '§'; break; }
+			case 'Ú': { buf[i] = ''; break; }
+			case 'û': { buf[i] = '¨'; break; }
+			case 'Û': { buf[i] = '‘'; break; }
+			case 'ý': { buf[i] = 'ª'; break; }
+			case 'Ý': { buf[i] = '“'; break; }
+			case 'þ': { buf[i] = '«'; break; }
+			case 'Þ': { buf[i] = '”'; break; }
+			case 'ÿ': { buf[i] = '¬'; break; }
+			case 'ß': { buf[i] = '•'; break; }
+			case '*': { buf[i] = ']'; break; }
+		}
+	}
 }
