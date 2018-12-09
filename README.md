@@ -31,3 +31,11 @@ cmake ..
   * On Linux, use make:
     > make
 * The compiled plugin should appear in the **bin** folder
+
+## Русская локализация для SanLtd
+Если вы используете плагин CRP, вы также можете включить подобный режим в плагине fmt:
+```pawn
+native fmt_toggle_crp_mode(bool: toggle);
+```
+
+При включенном режиме CRP, плагин будет автоматически конвентировать символы, чтобы они нормально отображались у игроков с локализацией от SanLtd.
