@@ -17,6 +17,7 @@ void Plugin::Unload()
 const AMX_NATIVE_INFO nativeList[] =
 {
 	{ "fmt_toggle_crp_mode", Natives::fmt_toggle_crp_mode },
+	{ "fmt_toggle_dialog_callback", Natives::fmt_toggle_dialog_callback },
 	// ======================
 	{ "SendClientMessagef", Natives::SendClientMessagef },
 	{ "SendClientMessageToAllf", Natives::SendClientMessageToAllf },
@@ -60,6 +61,17 @@ void Plugin::ToggleCrpMode(AMX* amx, bool toggle)
 	}
 
 	amxData->second.useCrpMode = toggle;
+}
+
+void Plugin::ToggleDialogCallback(AMX* amx, bool toggle)
+{
+	auto amxData = amxMap.find(amx);
+
+	if (amxData == amxMap.end()) {
+		return;
+	}
+
+	amxData->second.useDialogCallback = toggle;
 }
 
 cell* get_amxaddr(AMX* amx, cell amx_addr)
@@ -161,4 +173,37 @@ void Plugin::TranslateString(char* buf, int32_t len)
 			case '*': { buf[i] = ']'; break; }
 		}
 	}
+}
+
+void Plugin::CallDialogCallback(AMX* amx, int32_t playerId, int32_t dialogId, int32_t style, const char* caption, const char* info, const char* button1, const char* button2)
+{
+	auto amxData = amxMap.find(amx);
+
+	if (amxData == amxMap.end() || !amxData->second.useDialogCallback) {
+		return;
+	}
+
+	int32_t index = -1;
+
+	if (amx_FindPublic(amx, "OnPlayerDialogShow", &index) != AMX_ERR_NONE) {
+		return;
+	}
+
+	cell captionAddr;
+	cell infoAddr;
+	cell button1Addr;
+	cell button2Addr;
+
+	amx_PushString(amx, &button2Addr, nullptr, button2, 0, 0);
+	amx_PushString(amx, &button1Addr, nullptr, button1, 0, 0);
+	amx_PushString(amx, &infoAddr, nullptr, info, 0, 0);
+	amx_PushString(amx, &captionAddr, nullptr, caption, 0, 0);
+	amx_Push(amx, static_cast<cell>(style));
+	amx_Push(amx, static_cast<cell>(dialogId));
+	amx_Push(amx, static_cast<cell>(playerId));
+	amx_Exec(amx, nullptr, index);
+	amx_Release(amx, captionAddr);
+	amx_Release(amx, infoAddr);
+	amx_Release(amx, button1Addr);
+	amx_Release(amx, button2Addr);
 }

@@ -7,6 +7,12 @@ cell AMX_NATIVE_CALL Natives::fmt_toggle_crp_mode(AMX* amx, cell* params)
 	return 1;
 }
 
+cell AMX_NATIVE_CALL Natives::fmt_toggle_dialog_callback(AMX* amx, cell* params)
+{
+	Plugin::ToggleDialogCallback(amx, params[1] ? true : false);
+	return 1;
+}
+
 cell AMX_NATIVE_CALL Natives::SendClientMessagef(AMX* amx, cell* params)
 {
 	return static_cast<cell>(SendClientMessage(
@@ -78,12 +84,25 @@ cell AMX_NATIVE_CALL Natives::ShowPlayerDialogf(AMX* amx, cell* params)
 	char* button2 = nullptr;
 	amx_StrParam(amx, params[6], button2);
 
+	char* info = Plugin::FormatString(amx, params, 7);
+
+	Plugin::CallDialogCallback(
+		amx,
+		static_cast<int>(params[1]),
+		static_cast<int>(params[2]),
+		static_cast<int>(params[3]),
+		caption ? caption : "",
+		info ? info : "",
+		button1 ? button1 : "",
+		button2 ? button2 : ""
+	);
+
 	return static_cast<cell>(ShowPlayerDialog(
 		static_cast<int>(params[1]),
 		static_cast<int>(params[2]),
 		static_cast<int>(params[3]),
 		caption ? caption : "",
-		Plugin::FormatString(amx, params, 7),
+		info ? info : "",
 		button1 ? button1 : "",
 		button2 ? button2 : ""
 	));
