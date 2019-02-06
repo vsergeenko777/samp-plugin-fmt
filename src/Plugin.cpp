@@ -6,7 +6,7 @@ std::map<AMX*, Plugin::AmxData> Plugin::amxMap;
 void Plugin::Load()
 {
 	sampgdk::logprintf(" * fmt plugin loaded");
-	sampgdk::logprintf(" * v2.0 (c) vsergeenko");
+	sampgdk::logprintf(" * v2.1 (c) vsergeenko");
 }
 
 void Plugin::Unload()
