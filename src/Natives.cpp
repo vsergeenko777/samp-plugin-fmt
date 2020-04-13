@@ -135,3 +135,22 @@ cell AMX_NATIVE_CALL Natives::SetPlayerChatBubblef(AMX* amx, cell* params)
 		static_cast<int>(params[4])
 	));
 }
+
+cell AMX_NATIVE_CALL Natives::TextDrawCreatef(AMX* amx, cell* params)
+{
+	return static_cast<cell>(TextDrawCreate(
+		static_cast<float>(amx_ctof(params[1])),
+		static_cast<float>(amx_ctof(params[2])),
+		Plugin::FormatString(amx, params, 3, true)
+	));
+}
+
+cell AMX_NATIVE_CALL Natives::CreatePlayerTextDrawf(AMX* amx, cell* params)
+{
+	return static_cast<cell>(CreatePlayerTextDraw(
+		static_cast<int>(params[1]),
+		static_cast<float>(amx_ctof(params[2])),
+		static_cast<float>(amx_ctof(params[3])),
+		Plugin::FormatString(amx, params, 4, true)
+	));
+}
