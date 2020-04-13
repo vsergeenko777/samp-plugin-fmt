@@ -12,6 +12,8 @@ native ShowPlayerDialogf(playerid, dialogid, style, const caption[], const butto
 native SendPlayerMessageToPlayerf(playerid, senderid, const message[], {Float,_}:...);
 native SendPlayerMessageToAllf(senderid, const message[], {Float,_}:...);
 native SetPlayerChatBubblef(playerid, color, Float:drawdistance, expiretime, const text[], {Float,_}:...);
+native Text:TextDrawCreatef(Float:x, Float:y, const text[], {Float,_}:...);
+native PlayerText:CreatePlayerTextDrawf(playerid, Float:x, Float:y, const text[], {Float,_}:...);
 ```
 
 ## Build
