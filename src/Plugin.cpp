@@ -30,6 +30,8 @@ const AMX_NATIVE_INFO nativeList[] =
 	{ "SendPlayerMessageToPlayerf", Natives::SendPlayerMessageToPlayerf },
 	{ "SendPlayerMessageToAllf", Natives::SendPlayerMessageToAllf },
 	{ "SetPlayerChatBubblef", Natives::SetPlayerChatBubblef },
+	{ "TextDrawCreatef", Natives::TextDrawCreatef },
+	{ "CreatePlayerTextDrawf", Natives::CreatePlayerTextDrawf },
 	// ======================
 	{ NULL, NULL }
 };
