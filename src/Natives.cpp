@@ -86,6 +86,16 @@ cell AMX_NATIVE_CALL Natives::ShowPlayerDialogf(AMX* amx, cell* params)
 
 	char* info = Plugin::FormatString(amx, params, 7);
 
+	bool result = ShowPlayerDialog(
+		static_cast<int>(params[1]),
+		static_cast<int>(params[2]),
+		static_cast<int>(params[3]),
+		caption ? caption : "",
+		info ? info : "",
+		button1 ? button1 : "",
+		button2 ? button2 : ""
+	);
+
 	Plugin::CallDialogCallback(
 		amx,
 		static_cast<int>(params[1]),
@@ -97,15 +107,7 @@ cell AMX_NATIVE_CALL Natives::ShowPlayerDialogf(AMX* amx, cell* params)
 		button2 ? button2 : ""
 	);
 
-	return static_cast<cell>(ShowPlayerDialog(
-		static_cast<int>(params[1]),
-		static_cast<int>(params[2]),
-		static_cast<int>(params[3]),
-		caption ? caption : "",
-		info ? info : "",
-		button1 ? button1 : "",
-		button2 ? button2 : ""
-	));
+	return static_cast<cell>(result);
 }
 
 cell AMX_NATIVE_CALL Natives::SendPlayerMessageToPlayerf(AMX* amx, cell* params)
